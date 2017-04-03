@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ans_ques : all_panel {
     public Text title, quest, correct, countdown; //, finalScore; //答题界面的各种信息
+    public RawImage pic;
     private bool random; //记录是否使用随机顺序
     protected int num_done; //已经答过的题数
     private List<QuestData> ques; //记录当前模式的题目信息
@@ -27,7 +28,7 @@ public class ans_ques : all_panel {
 
     // Use this for initialization
     void OnEnable () {
-        if(circle || circle_begin != circle.transform.localPosition){
+        if (circle || circle_begin != circle.transform.localPosition) {
             circle_begin = circle.transform.localPosition;
         }
     }
@@ -55,13 +56,13 @@ public class ans_ques : all_panel {
         if (ans.activeInHierarchy) circle.transform.localPosition = circle_begin + hand;
         if (Input.GetKeyDown (now_key[5])) {
             if (v >= genhao2 / 2 && Mathf.Abs (h) <= genhao2 / 2) {
-                if(ansBtns[0].getState()) {ansBtns[0].OnPressed ();}
+                if (ansBtns[0].getState ()) { ansBtns[0].OnPressed (); }
             } else if (h > genhao2 / 2 && Mathf.Abs (v) < genhao2 / 2) {
-                if(ansBtns[1].getState()) {ansBtns[1].OnPressed ();}
+                if (ansBtns[1].getState ()) { ansBtns[1].OnPressed (); }
             } else if (h < -genhao2 / 2 && Mathf.Abs (v) < genhao2 / 2) {
-                if(ansBtns[2].getState()) {ansBtns[2].OnPressed ();}
+                if (ansBtns[2].getState ()) { ansBtns[2].OnPressed (); }
             } else if (v <= -genhao2 / 2 && Mathf.Abs (h) <= genhao2 / 2) {
-                if(ansBtns[3].getState()) {ansBtns[3].OnPressed ();}
+                if (ansBtns[3].getState ()) { ansBtns[3].OnPressed (); }
             }
         }
     }
@@ -114,16 +115,17 @@ public class ans_ques : all_panel {
         title.text = "第" + (num_done + 1) + "/" + ques.Count + "题";
         quest.text = ques[no].quest;
         correct.text = "已对" + correctNum + "题";
-        Debug.Log(ques[no].type);
+        Debug.Log (ques[no].type);
         switch (ques[no].type) {
             case QuestData.ty_choose:
                 for (int i = 0; i < ques[no].op_num; i++) {
                     ansBtns[i].setActive (true);
                     ansBtns[i].Init ((char) (i + 'A') + " " + ques[no].answer[i]);
                 }
-                for(int i = ques[no].op_num; i < numOfChoices; ++i){
+                for (int i = ques[no].op_num; i < numOfChoices; ++i) {
                     ansBtns[i].setActive (false);
                 }
+                pic.gameObject.SetActive(false);
                 break;
             case QuestData.ty_judge:
                 ansBtns[0].setActive (false);
@@ -133,8 +135,19 @@ public class ans_ques : all_panel {
                 for (int i = 1; i <= 2; ++i) {
                     ansBtns[i].Init (ques[no].answer[i]);
                 }
+                pic.gameObject.SetActive(false);
                 break;
             case QuestData.ty_pic:
+                pic.gameObject.SetActive(true);
+                pic.texture = (new WWW(Application.persistentDataPath + "/" + ques[no].src)).texture;
+                for (int i = 0; i < ques[no].op_num; i++) {
+                    ansBtns[i].setActive (true);
+                    ansBtns[i].Init ((char) (i + 'A') + " " + ques[no].answer[i]);
+                }
+                for (int i = ques[no].op_num; i < numOfChoices; ++i) {
+                    ansBtns[i].setActive (false);
+                }
+                break;
                 break;
         }
     }

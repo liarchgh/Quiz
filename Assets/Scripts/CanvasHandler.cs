@@ -14,9 +14,8 @@ public class CanvasHandler : all_panel {
     public List<string> quizData;
     public const string nameOfCompe = "quiz_competition.txt"; //competition模式文件名
     public const string nameOfOther = "quiz_other.txt"; //其他模式文件名
-    public string urlOfCompe; //更新competition模式文件的链接
-    public string urlOfOther; //……其他模式……
-    private string src, now_file; //src为原文件位置 now为最新文件位置（均无文件名）
+    public string urlUpdate; //更新competition模式文件的链接
+    private string src;//, now_file; //src为原文件位置 now为最新文件位置（均无文件名）
     public ans_ques newaq;
     public int numOfChoices = 4;
     private const string ques_pic = "图片题",
@@ -36,10 +35,10 @@ public class CanvasHandler : all_panel {
         choose = cho;
 #if UNITY_ANDROID
         src = Application.streamingAssetsPath;
-        now_file = "jar:file://" + Application.persistentDataPath;
+        // now_file = "jar:file://" + Application.persistentDataPath;
 #else
         src = "file://" + Application.streamingAssetsPath;
-        now_file = "file://" + Application.persistentDataPath;
+        // now_file = "file://" + Application.persistentDataPath;
 #endif
         load_all ();
         choose.SetActive (true);
@@ -69,7 +68,7 @@ public class CanvasHandler : all_panel {
                 if (!char.IsLetter(r[0])) { //将这一题的第一行转化为题目和答案
                     string tmp2 = tmp1.Substring(5, tmp1.Length - 6); // 正式题目或者路径信息
                     char ans = tmp1[tmp1.Length - 1]; //最后一个字母  表示答案
-                    if (str_type == ques_choose && th > 0) {
+                    if ((str_type == ques_choose || str_type == ques_pic) && th > 0) {
                         tmp.op_num = counter;
                         tmpList.Add (tmp);
                     }
@@ -99,7 +98,11 @@ public class CanvasHandler : all_panel {
                             break;
                         case ques_pic:
                             tmp = new QuestData(numOfChoices);
-                            tmp.type = QuestData.ty_pic;
+                            tmp.type = QuestData.ty_choose;
+                            tmp.quest = tmp2; //tmp2作为题目
+                            tmp.ans = ans - 'A'; //ans代表的字符作为答案
+                            tmp.src = raw[++i];
+                            counter = 0;
                             break;
                     }
                 } else {
@@ -164,21 +167,18 @@ public class CanvasHandler : all_panel {
     }
 
     IEnumerator up_file () {
-        WWW new_file = new WWW (urlOfCompe);
-        Debug.Log(urlOfCompe);
+        WWW new_file = new WWW (urlUpdate + "/" + nameOfCompe);
         yield return new_file;
-        Debug.Log(new_file.text.Length);
         if (new_file.text.Length > 5) {
             File.Delete (Application.persistentDataPath + "/" + nameOfCompe);
             CreateFile (Application.persistentDataPath + "/" + nameOfCompe, new_file.text);
         }
-        new_file = new WWW (urlOfOther);
+        new_file = new WWW (urlUpdate + "/" + nameOfOther);
         yield return new_file;
         if (new_file.text.Length > 5) {
             File.Delete (Application.persistentDataPath + "/" + nameOfOther);
             CreateFile (Application.persistentDataPath + "/" + nameOfOther, new_file.text);
         }
-        Debug.Log("succes");
         load_all ();
     }
 
