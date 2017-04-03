@@ -1,0 +1,8 @@
+A:Joystick1Button0
+B:Joystick1Button1
+X:Joystick1Button2
+Y:Joystick1Button3
+select:Joystick1Button11
+start:Joystick1Button10
+escape:Escape
+

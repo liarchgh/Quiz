@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5ab5659171ef7d44785d0da93d2c9ddc
+timeCreated: 1490449639
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - welcome: {fileID: 111564, guid: 7daddefe2dfd40b46ab133914c2b8c49, type: 2}
+  - quiz: {instanceID: 0}
+  - ans: {instanceID: 0}
+  - score: {instanceID: 0}
+  - circle: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,7 @@
+A:Joystick1Button10
+B:Joystick1Button5
+X:Joystick1Button2
+Y:Joystick1Button3
+OK:Joystick1Button7
+III:Joystick1Button11
+return:Joystick1Button11
