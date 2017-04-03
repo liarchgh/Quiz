@@ -53,6 +53,7 @@ public class CanvasHandler : all_panel {
         List<QuestData> tmpList = new List<QuestData> ();
         QuestData tmp = new QuestData (numOfChoices);
         int counter = 0; //counter记录选项个数
+        string str_type = "2121"; //题目类型
         for (int th = 0; th < raw.Count; ++th) { //每一轮从每一题的第一行开始识别 将整道题识别完 下一轮开始时别选项
             string r = raw[th];
             int i = 0; //记录整个题目的正式开始位置 即‘、’符号的位置
@@ -61,20 +62,18 @@ public class CanvasHandler : all_panel {
                     break;
                 }
             }
-            if (i != r.Length - 1) { //如果有题目的话
-                string tmp1 = r.Substring (i + 1, r.Length - i - 1); //'、'符号后的字符串
-                string str_type = "2121"; //题目类型
-                string tmp2 = "asdsa";
-                if(r.Length > i + 6){
-                    tmp2 = r.Substring (i + 6, r.Length - 7 - i); // 正式题目或者路径信息
-                    str_type = r.Substring (i + 2, 3); //题目类型
-                }
-                char ans = r[r.Length - 1]; //题目这一行的最后一个字符 一般为答案
+            if (i < r.Length - 1) { //如果有题目的话
+                string tmp1 = r.Substring (i + 1); //'、'符号后的字符串
+                // string tmp2 = "asdsa";
+                // char ans = r[r.Length - 1]; //题目这一行的最后一个字符 一般为答案
                 if (!char.IsLetter(r[0])) { //将这一题的第一行转化为题目和答案
+                    string tmp2 = tmp1.Substring(5, tmp1.Length - 6); // 正式题目或者路径信息
+                    char ans = tmp1[tmp1.Length - 1]; //最后一个字母  表示答案
                     if (str_type == ques_choose && th > 0) {
                         tmp.op_num = counter;
                         tmpList.Add (tmp);
                     }
+                    str_type = tmp1.Substring (1, 3); //题目类型
                     switch (str_type) {
                         case ques_choose:
                             tmp = new QuestData(numOfChoices);
@@ -104,8 +103,7 @@ public class CanvasHandler : all_panel {
                             break;
                     }
                 } else {
-                    tmp.answer[counter] = tmp2;
-                    counter++;
+                    tmp.answer[counter++] = tmp1;
                 }
             }
         }
@@ -167,7 +165,9 @@ public class CanvasHandler : all_panel {
 
     IEnumerator up_file () {
         WWW new_file = new WWW (urlOfCompe);
+        Debug.Log(urlOfCompe);
         yield return new_file;
+        Debug.Log(new_file.text.Length);
         if (new_file.text.Length > 5) {
             File.Delete (Application.persistentDataPath + "/" + nameOfCompe);
             CreateFile (Application.persistentDataPath + "/" + nameOfCompe, new_file.text);
@@ -178,6 +178,7 @@ public class CanvasHandler : all_panel {
             File.Delete (Application.persistentDataPath + "/" + nameOfOther);
             CreateFile (Application.persistentDataPath + "/" + nameOfOther, new_file.text);
         }
+        Debug.Log("succes");
         load_all ();
     }
 

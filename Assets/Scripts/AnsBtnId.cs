@@ -8,6 +8,7 @@ public class AnsBtnId : MonoBehaviour {
     public string t2;
     public Button btn;
     public Image img;
+    private bool state;
 	private Vector3 begin;
 	private Vector3 pos_long = new Vector3 (1000, 1000, 0);
 
@@ -22,9 +23,13 @@ public class AnsBtnId : MonoBehaviour {
         btn.interactable = true;
     }
 
-    public void setActive (bool state) {
+    public void setActive (bool c_state) {
+        state = c_state;
         if (!state) { btn.transform.localPosition = pos_long; }
 		else {btn.transform.localPosition = begin;}
+    }
+    public bool getState(){
+        return state;
     }
 
     public void OnPressed () {
