@@ -52,7 +52,7 @@ public class CanvasHandler : all_panel {
         List<QuestData> tmpList = new List<QuestData> ();
         QuestData tmp = new QuestData (numOfChoices);
         int counter = 0; //counter记录选项个数
-        string str_type = "2121"; //题目类型
+        string str_type = ""; //题目类型
         for (int th = 0; th < raw.Count; ++th) { //每一轮从每一题的第一行开始识别 将整道题识别完 下一轮开始时别选项
             string r = raw[th];
             int i = 0; //记录整个题目的正式开始位置 即‘、’符号的位置
@@ -98,10 +98,11 @@ public class CanvasHandler : all_panel {
                             break;
                         case ques_pic:
                             tmp = new QuestData(numOfChoices);
-                            tmp.type = QuestData.ty_choose;
+                            tmp.type = QuestData.ty_pic;
                             tmp.quest = tmp2; //tmp2作为题目
                             tmp.ans = ans - 'A'; //ans代表的字符作为答案
-                            tmp.src = raw[++i];
+                            tmp.src = raw[++th];
+                            StartCoroutine(load_pic(tmp.src));
                             counter = 0;
                             break;
                     }
@@ -111,6 +112,12 @@ public class CanvasHandler : all_panel {
             }
         }
         return tmpList;
+    }
+
+    private IEnumerator load_pic(string src){ //src是文件名 需要和url结合来读取网络文件
+        WWW pic = new WWW(urlUpdate + "/" + src);
+        yield return pic;
+        CreateFile(Application.persistentDataPath + "/" + src, pic, true);
     }
 
     //用流方式将文件读为字符串
@@ -147,7 +154,7 @@ public class CanvasHandler : all_panel {
 
         WWW w = new WWW (src + "/" + name);
         yield return w;
-        CreateFile (Application.persistentDataPath + "/" + name, w.text); //ok
+        CreateFile (Application.persistentDataPath + "/" + name, w, false); //ok
         //StartCoroutine(up_file());
         quizData = LoadFile (Application.persistentDataPath + "/" + name); //ok
         switch (name) {
@@ -170,29 +177,26 @@ public class CanvasHandler : all_panel {
         WWW new_file = new WWW (urlUpdate + "/" + nameOfCompe);
         yield return new_file;
         if (new_file.text.Length > 5) {
-            File.Delete (Application.persistentDataPath + "/" + nameOfCompe);
-            CreateFile (Application.persistentDataPath + "/" + nameOfCompe, new_file.text);
+            CreateFile (Application.persistentDataPath + "/" + nameOfCompe, new_file, true);
         }
         new_file = new WWW (urlUpdate + "/" + nameOfOther);
         yield return new_file;
         if (new_file.text.Length > 5) {
-            File.Delete (Application.persistentDataPath + "/" + nameOfOther);
-            CreateFile (Application.persistentDataPath + "/" + nameOfOther, new_file.text);
+            CreateFile (Application.persistentDataPath + "/" + nameOfOther, new_file, true);
         }
         load_all ();
     }
 
     //在路径path（包含文件名）创建文件并写入info字符串
-    void CreateFile (string path, string info) {
-        StreamWriter sw;
+    void CreateFile (string path, WWW info, bool must) { //must为真时覆盖源文件 否则存在源文件就不操作
         FileInfo file = new FileInfo (path);
-        if (file.Exists) {
+        if (!must && file.Exists) {
             return;
         }
-        sw = file.CreateText ();
-        sw.WriteLine (info);
-        sw.Close ();
-        sw.Dispose ();
+        if(file.Exists){
+            File.Delete (path);
+        }
+        File.WriteAllBytes(path, info.bytes);
     }
 
     public GameObject getWel () {

@@ -56,13 +56,13 @@ public class ans_ques : all_panel {
         if (ans.activeInHierarchy) circle.transform.localPosition = circle_begin + hand;
         if (Input.GetKeyDown (now_key[5])) {
             if (v >= genhao2 / 2 && Mathf.Abs (h) <= genhao2 / 2) {
-                if (ansBtns[0].getState ()) { ansBtns[0].OnPressed (); }
+                if (ansBtns[0].gameObject.activeInHierarchy) { ansBtns[0].OnPressed (); }
             } else if (h > genhao2 / 2 && Mathf.Abs (v) < genhao2 / 2) {
-                if (ansBtns[1].getState ()) { ansBtns[1].OnPressed (); }
+                if (ansBtns[1].gameObject.activeInHierarchy) { ansBtns[1].OnPressed (); }
             } else if (h < -genhao2 / 2 && Mathf.Abs (v) < genhao2 / 2) {
-                if (ansBtns[2].getState ()) { ansBtns[2].OnPressed (); }
+                if (ansBtns[2].gameObject.activeInHierarchy) { ansBtns[2].OnPressed (); }
             } else if (v <= -genhao2 / 2 && Mathf.Abs (h) <= genhao2 / 2) {
-                if (ansBtns[3].getState ()) { ansBtns[3].OnPressed (); }
+                if (ansBtns[3].gameObject.activeInHierarchy) { ansBtns[3].OnPressed (); }
             }
         }
     }
@@ -107,10 +107,10 @@ public class ans_ques : all_panel {
         }
         num_done = 0;
         correctNum = 0;
-        UpdateQuest (noOfQuest);
+        StartCoroutine (UpdateQuest (noOfQuest));
     }
 
-    public void UpdateQuest (int no) {
+    public IEnumerator UpdateQuest (int no) {
         ans.SetActive (false);
         title.text = "第" + (num_done + 1) + "/" + ques.Count + "题";
         quest.text = ques[no].quest;
@@ -119,35 +119,41 @@ public class ans_ques : all_panel {
         switch (ques[no].type) {
             case QuestData.ty_choose:
                 for (int i = 0; i < ques[no].op_num; i++) {
-                    ansBtns[i].setActive (true);
+                    ansBtns[i].gameObject.SetActive (true);
                     ansBtns[i].Init ((char) (i + 'A') + " " + ques[no].answer[i]);
                 }
                 for (int i = ques[no].op_num; i < numOfChoices; ++i) {
-                    ansBtns[i].setActive (false);
+                    ansBtns[i].gameObject.SetActive (false);
                 }
-                pic.gameObject.SetActive(false);
+                pic.gameObject.gameObject.SetActive (false);
                 break;
             case QuestData.ty_judge:
-                ansBtns[0].setActive (false);
-                ansBtns[3].setActive (false);
-                ansBtns[1].setActive (true);
-                ansBtns[2].setActive (true);
+                ansBtns[0].gameObject.SetActive (false);
+                ansBtns[3].gameObject.SetActive (false);
+                ansBtns[1].gameObject.SetActive (true);
+                ansBtns[2].gameObject.SetActive (true);
                 for (int i = 1; i <= 2; ++i) {
                     ansBtns[i].Init (ques[no].answer[i]);
                 }
-                pic.gameObject.SetActive(false);
+                pic.gameObject.SetActive (false);
                 break;
             case QuestData.ty_pic:
-                pic.gameObject.SetActive(true);
-                pic.texture = (new WWW(Application.persistentDataPath + "/" + ques[no].src)).texture;
+                pic.gameObject.SetActive (true);
+                WWW new_pic;
+#if UNITY_ANDROID
+                new_pic = new WWW (Application.persistentDataPath + "/" + ques[no].src);
+#else
+                new_pic = new WWW ("file://" + Application.persistentDataPath + "/" + ques[no].src);
+#endif
+                yield return new_pic;
+                pic.texture = new_pic.texture;
                 for (int i = 0; i < ques[no].op_num; i++) {
-                    ansBtns[i].setActive (true);
+                    ansBtns[i].gameObject.SetActive (true);
                     ansBtns[i].Init ((char) (i + 'A') + " " + ques[no].answer[i]);
                 }
                 for (int i = ques[no].op_num; i < numOfChoices; ++i) {
-                    ansBtns[i].setActive (false);
+                    ansBtns[i].gameObject.SetActive (false);
                 }
-                break;
                 break;
         }
     }
