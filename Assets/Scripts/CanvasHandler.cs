@@ -54,6 +54,7 @@ public class CanvasHandler : all_panel {
         int counter = 0; //counter记录选项个数
         string str_type = ""; //题目类型
         for (int th = 0; th < raw.Count; ++th) { //每一轮从每一题的第一行开始识别 将整道题识别完 下一轮开始时别选项
+        Debug.Log("th is " + th + "  r is " + raw[th]);
             string r = raw[th];
             int i = 0; //记录整个题目的正式开始位置 即‘、’符号的位置
             for (i = 0; i < r.Length; i++) {
@@ -61,8 +62,11 @@ public class CanvasHandler : all_panel {
                     break;
                 }
             }
-            if (i < r.Length - 1) { //如果有题目的话
-                string tmp1 = r.Substring (i + 1); //'、'符号后的字符串
+            if (i < r.Length) { //如果有'、'的话
+                string tmp1 = "";
+                if(i < r.Length - 1){
+                    tmp1 = r.Substring (i + 1); //'、'符号后的字符串
+                }
                 // string tmp2 = "asdsa";
                 // char ans = r[r.Length - 1]; //题目这一行的最后一个字符 一般为答案
                 if (!char.IsLetter(r[0])) { //将这一题的第一行转化为题目和答案
@@ -102,11 +106,12 @@ public class CanvasHandler : all_panel {
                             tmp.quest = tmp2; //tmp2作为题目
                             tmp.ans = ans - 'A'; //ans代表的字符作为答案
                             tmp.src = raw[++th];
-                            StartCoroutine(load_pic(tmp.src));
                             counter = 0;
+                            StartCoroutine(load_pic(tmp.src));
                             break;
                     }
                 } else {
+                    Debug.Log(counter + "  " + th);
                     tmp.answer[counter++] = tmp1;
                 }
             }
