@@ -8,6 +8,7 @@ public class choose_control : all_panel {
 	
 	// Update is called once per frame
 	void Update () {
+		//不同按键进入不同手柄操作模式
 		if(Input.GetKeyDown(KeyCode.Joystick1Button3)){
 			now_key = key_vrbox;
 			next();
@@ -26,6 +27,7 @@ public class choose_control : all_panel {
 		}
 	}
 
+	//开始 关闭本panel 打开答题面板
 	public void next(){
 		welcome.SetActive(true);
 		choose.SetActive(false);

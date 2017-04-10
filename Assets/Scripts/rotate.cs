@@ -13,7 +13,7 @@ public class rotate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!only_begin || Time.time < 1000)
+        if (!only_begin || Time.time < 2)
             transform.LookAt(tar.transform);
     }
 }

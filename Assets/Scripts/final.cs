@@ -14,6 +14,7 @@ public class final : all_panel {
 	
 	// Update is called once per frame
 	void Update () {
+            //按键进入 重新开始/返回主菜单
             if (Input.GetKeyDown(now_key[5])) {
                 Retry();
             }
@@ -22,24 +23,12 @@ public class final : all_panel {
             }
 	}
 
+    //重新开始
     public void Retry() {
-        //ActivitatePanel(score, false);
-        //switch (what) {
-        //case competition:
-        //    OnCompetition();
-        //    break;
-        //case classic:
-        //    OnClassic();
-        //    break;
-        //case time:
-        //    OnTimeChallenge();
-        //    break;
-        //}
 		aq.quiz_begin(aq.quiz_type);
     }
 
     public void ReturnToMenu() {
         welcome.SetActive(true);
-        //ActivitatePanel(welcome, true);
     }
 }

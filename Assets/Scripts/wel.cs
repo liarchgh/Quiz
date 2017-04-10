@@ -13,21 +13,18 @@ public class wel : all_panel {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(now_key[0])) {
-			//Debug.Log(scr_aq.quesOfOther);
+        //不同按键进入不同答题模式
+        if (Input.GetKeyDown(now_key[0])) {
             scr_aq.quiz_begin(scr_aq.getTypeCom());
         }
         if (Input.GetKeyDown(now_key[1])) {
             scr_aq.quiz_begin(scr_aq.getTypeCla());
-            // OnClassic();
         }
         if (Input.GetKeyDown(now_key[2])) {
             scr_aq.quiz_begin(scr_aq.getTypeTl());
-            // OnTimeChallenge();
         }
         if (Input.GetKeyDown(now_key[3])) {
             scr_ch.up();
-            // OnTimeChallenge();
         }
 	}
 }

@@ -133,7 +133,6 @@ public class CanvasHandler : all_panel {
                 String line;
                 while ((line = sr.ReadLine ()) != null) {
                     arrlist.Add (line);
-                    //Debug.Log(line);
                 }
             }
         } catch (Exception e) {
@@ -204,6 +203,7 @@ public class CanvasHandler : all_panel {
         File.WriteAllBytes(path, info.bytes);
     }
 
+    //获得各种引用
     public GameObject getWel () {
         return welcome;
     }
@@ -219,64 +219,4 @@ public class CanvasHandler : all_panel {
     public GameObject getCir () {
         return circle;
     }
-
-    // public List<QuestData> aq.quesOfCompe;//记录当前模式的题目信息
-    // public List<QuestData> quesOfOther;//记录当前模式的题目信息
-
-    // private int num_done;//已经答过的题数
-    // public int is_what;//记录当前进入的是哪种模式
-    // private const int nothing = 0;
-    // private const int competition = 1;
-    // private const int classic = 2;
-    // private const int time = 3;
-
-    /*
-#if UNITY_IPHONE
-            string filepath = Application.dataPath +"/Raw
-            quizData = LoadFile(filepath + "/Quiz.txt");
-    #elif UNITY_ANDROID
-            //string filepath = "jar:file://" + Application.dataPath + "!/assets/";
-            quizData = LoadFile_Android ("Quiz");
-#else
-            string filepath = Application.dataPath + "/StreamingAssets";
-            quizData = LoadFile (filepath + "/Quiz.txt");
-#endif
-            //quizData=LoadFile(fileName);
-            //LoadFile(Application.streamingAssetsPath+"/position.txt");
-            questData = ScanData (quizData);
-            que_useful = new bool[questData.Count];
-    */
-
-    // List<string> LoadFile_Android(string name) {
-    //     List<string> arrlist = new List<string>();
-    //     try {
-    //         TextAsset TXTFile = Resources.Load(name) as TextAsset;
-    //         if (TXTFile != null) {
-    //             Debug.Log(TXTFile.text);
-    //             string[] tmp = TXTFile.text.Split(new char[] { '\r', '\n' });
-    //             bool isBlank = false;
-    //             foreach (string t in tmp) {
-    //                 if (isBlank) {
-    //                     isBlank = false;
-    //                 }
-    //                 else {
-    //                     isBlank = true;
-    //                     arrlist.Add(t);
-    //                 }
-    //             }
-    //             //l.setInfo("success");
-    //         }
-    //         else {
-    //             Debug.Log("Failed");
-    //             //l.setInfo("failed to load map");
-    //             return null;
-    //         }
-
-    //     }
-    //     catch (Exception e) {
-    //         Debug.Log(e.Message);
-    //     }
-    //     return arrlist;
-    // }
-
 }
